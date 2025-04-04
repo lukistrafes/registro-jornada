@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Jornada</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .inicio {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .fin {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>Registro de Jornada</h2>
+  <form id="formulario">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="apellidos">Apellidos</label>
+    <input type="text" id="apellidos" name="apellidos" required>
+
+    <label for="empleo">Empleo</label>
+    <select id="empleo" name="empleo" required>
+      <option value="">Selecciona...</option>
+      <option value="Auxiliar">Auxiliar</option>
+      <option value="Vigilante de seguridad">Vigilante de seguridad</option>
+    </select>
+
+    <label for="evento">Evento</label>
+    <select id="evento" name="evento" required>
+      <option value="">Selecciona...</option>
+      <option value="Prueba">Prueba</option>
+    </select>
+
+    <div class="btn-group">
+      <button type="button" class="inicio" onclick="enviarFormulario('Inicio')">Inicio de jornada</button>
+      <button type="button" class="fin" onclick="enviarFormulario('Fin')">Fin de jornada</button>
+    </div>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <script>
+    const URL_DESTINO = "https://script.google.com/macros/s/AKfycbxupjPBAwD7SO9QdC0eZB5Z_uLMUbTk9PcibtMSPI_NHrkYd5gKkEwPTnn_5Cczk8k77Q/exec"; // Sustituye esto por tu URL real
+    const LAT_EVENTO = 36.6025; // Coordenadas estimadas
+    const LNG_EVENTO = -6.2337;
+    const RADIO_PERMITIDO = 200; 
+
+    function enviarFormulario(tipo) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        const distancia = calcularDistancia(lat, lng, LAT_EVENTO, LNG_EVENTO);
+        if (distancia > RADIO_PERMITIDO) {
+          document.getElementById("mensaje").innerText = "Estás fuera del rango permitido para registrar tu jornada.";
+          return;
+        }
+
+        const datos = {
+          nombre: document.getElementById("nombre").value,
+          apellidos: document.getElementById("apellidos").value,
+          empleo: document.getElementById("empleo").value,
+          evento: document.getElementById("evento").value,
+          tipo: tipo
+        };
+
+        fetch(URL_DESTINO, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos)
+        })
+        .then(res => res.text())
+        .then(msg => {
+          document.getElementById("mensaje").innerText = msg;
+          document.getElementById("formulario").reset();
+        })
+        .catch(err => {
+          document.getElementById("mensaje").innerText = "Error al enviar: " + err;
+        });
+      }, () => {
+        document.getElementById("mensaje").innerText = "No se pudo obtener la ubicación.";
+      });
+    }
+
+    function calcularDistancia(lat1, lon1, lat2, lon2) {
+      const R = 6371000; // radio Tierra en metros
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+  </script>
+</body>
+</html>
