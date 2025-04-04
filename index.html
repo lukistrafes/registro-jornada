@@ -74,8 +74,8 @@
 
   <script>
     const URL_DESTINO = "https://script.google.com/macros/s/AKfycbxupjPBAwD7SO9QdC0eZB5Z_uLMUbTk9PcibtMSPI_NHrkYd5gKkEwPTnn_5Cczk8k77Q/exec"; // Sustituye esto por tu URL real
-    const LAT_EVENTO = 36.6025; // Coordenadas estimadas
-    const LNG_EVENTO = -6.2337;
+    const LAT_EVENTO = 36.3979021; // Coordenadas estimadas
+    const LNG_EVENTO = -6.245197;
     const RADIO_PERMITIDO = 200; 
 
     function enviarFormulario(tipo) {
@@ -85,7 +85,7 @@
 
         const distancia = calcularDistancia(lat, lng, LAT_EVENTO, LNG_EVENTO);
         if (distancia > RADIO_PERMITIDO) {
-          document.getElementById("mensaje").innerText = "Estás fuera del rango permitido para registrar tu jornada.";
+          alert("Estás fuera del rango permitido para registrar tu jornada.");
           return;
         }
 
