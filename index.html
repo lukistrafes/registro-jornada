@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Jornada</title>
+  <title>Registro de Jornada Onix</title>
   <style>
     body {
       font-family: sans-serif;
@@ -43,7 +43,7 @@
   </style>
 </head>
 <body>
-  <h2>Registro de Jornada</h2>
+  <h2>Jornada Onix</h2>
   <form id="formulario">
     <label for="nombre">Nombre</label>
     <input type="text" id="nombre" name="nombre" required>
@@ -74,7 +74,7 @@
     const URL_DESTINO = "https://script.google.com/macros/s/AKfycbxupjPBAwD7SO9QdC0eZB5Z_uLMUbTk9PcibtMSPI_NHrkYd5gKkEwPTnn_5Cczk8k77Q/exec"; // Sustituye esto por tu URL real
     const LAT_EVENTO = 36.6031; // Latitud del evento
     const LNG_EVENTO = -6.2362; // Longitud del evento
-    const RADIO_PERMITIDO = 10000; // Rango en metros
+    const RADIO_PERMITIDO = 2000; // Aumentado a 2000 metros
 
     function enviarFormulario(tipo) {
       navigator.geolocation.getCurrentPosition(pos => {
