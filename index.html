@@ -71,9 +71,9 @@
   </form>
 
   <script>
-    const URL_DESTINO = "TU_URL_SCRIPT_WEB_APP"; // Sustituye esto por tu URL real
-    const LAT_EVENTO = 36.5984; // Latitud del evento
-    const LNG_EVENTO = -6.2466; // Longitud del evento
+    const URL_DESTINO = "https://script.google.com/macros/s/AKfycbxupjPBAwD7SO9QdC0eZB5Z_uLMUbTk9PcibtMSPI_NHrkYd5gKkEwPTnn_5Cczk8k77Q/exec"; // Sustituye esto por tu URL real
+    const LAT_EVENTO = 36.6031; // Latitud del evento
+    const LNG_EVENTO = -6.2362; // Longitud del evento
     const RADIO_PERMITIDO = 1000; // Rango en metros
 
     function enviarFormulario(tipo) {
@@ -84,10 +84,13 @@
         const distancia = calcularDistancia(lat, lng, LAT_EVENTO, LNG_EVENTO);
 
         alert("Tu ubicación actual:\nLat: " + lat + "\nLng: " + lng +
-              "\n\nDistancia al evento: " + distancia.toFixed(2) + " metros");
+              "\n\nDistancia al evento: " + distancia.toFixed(2) + " metros" +
+              "\nRadio permitido: " + RADIO_PERMITIDO + " metros");
 
-        if (distancia > RADIO_PERMITIDO) {
-          alert("Estás fuera del rango permitido para registrar tu jornada.");
+        if (distancia <= RADIO_PERMITIDO) {
+          alert("✅ Dentro del rango, se enviará");
+        } else {
+          alert("❌ Fuera del rango, NO se enviará");
           return;
         }
 
